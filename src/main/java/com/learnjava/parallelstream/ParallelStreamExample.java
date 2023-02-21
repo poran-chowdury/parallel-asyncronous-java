@@ -10,7 +10,7 @@ import static com.learnjava.util.LoggerUtil.log;
 
 public class ParallelStreamExample {
 
-    public List<String> stringTreasFormation(List<String> nameList) {
+    public List<String> stringTransFormation(List<String> nameList) {
         return nameList.parallelStream()
                 .map(this::addNameLengthTransform)
                 .collect(Collectors.toList());
@@ -20,7 +20,7 @@ public class ParallelStreamExample {
         List<String> namesList = DataSet.namesList();
         ParallelStreamExample streamExample = new ParallelStreamExample();
         startTimer();
-        List<String> resultList = streamExample.stringTreasFormation(namesList);
+        List<String> resultList = streamExample.stringTransFormation(namesList);
         log("result is : "+resultList);
         timeTaken();
     }
