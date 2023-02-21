@@ -47,7 +47,7 @@ public class ProductService {
     }
 
     public class ReviewInfoRunable implements Runnable {
-        private String productId;
+        private final String productId;
         private Review review;
 
         public ReviewInfoRunable(String productId) {
@@ -66,7 +66,7 @@ public class ProductService {
 
     public class ProductInfoRunnable implements Runnable {
         private ProductInfo productInfo;
-        private String productId;
+        private final String productId;
 
         public ProductInfoRunnable(String productId) {
             this.productId = productId;
