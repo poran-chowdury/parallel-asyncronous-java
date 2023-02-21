@@ -4,7 +4,6 @@ import com.learnjava.domain.Product;
 import com.learnjava.domain.ProductInfo;
 import com.learnjava.domain.Review;
 import com.learnjava.service.ProductInfoService;
-import com.learnjava.service.ProductService;
 import com.learnjava.service.ReviewService;
 
 import java.util.concurrent.ExecutionException;
@@ -37,51 +36,16 @@ public class ProductServiceUseExecutor {
         return new Product(productId, productInfo, review);
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
 
         ProductInfoService productInfoService = new ProductInfoService();
         ReviewService reviewService = new ReviewService();
-        ProductService productService = new ProductService(productInfoService, reviewService);
+        ProductServiceUseExecutor productService = new ProductServiceUseExecutor(productInfoService, reviewService);
         String productId = "ABC123";
         Product product = productService.retrieveProductDetails(productId);
         log("Product is " + product);
+        executorService.shutdown();
 
     }
 
-    public class ReviewInfoRunable implements Runnable {
-        private final String productId;
-        private Review review;
-
-        public ReviewInfoRunable(String productId) {
-            this.productId = productId;
-        }
-
-        public Review getReview() {
-            return review;
-        }
-
-        @Override
-        public void run() {
-            review = reviewService.retrieveReviews(this.productId);
-        }
-    }
-
-    public class ProductInfoRunnable implements Runnable {
-        private ProductInfo productInfo;
-        private final String productId;
-
-        public ProductInfoRunnable(String productId) {
-            this.productId = productId;
-        }
-
-        @Override
-        public void run() {
-            productInfo = productInfoService.retrieveProductInfo(productId);
-        }
-
-        public ProductInfo getProductInfo() {
-            return productInfo;
-        }
-
-    }
 }
