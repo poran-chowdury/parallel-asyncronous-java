@@ -10,7 +10,6 @@ import static com.learnjava.util.CommonUtil.*;
 
 public class LinedListExample {
     public List<Integer> multiplyEachValue(LinkedList<Integer> inputList, int multiplyValue, boolean isParallel){
-        stopWatchReset();
         startTimer();
         Stream<Integer> integerStream = inputList.stream();
         if (isParallel)

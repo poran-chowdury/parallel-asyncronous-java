@@ -12,7 +12,6 @@ import static com.learnjava.util.CommonUtil.*;
 public class ArraySplitEratorExample {
 
     public List<Integer> multiplyEachValue(ArrayList<Integer> inputList, int multiplyValue,boolean isParallel){
-        stopWatchReset();
         startTimer();
         Stream<Integer> integerStream = inputList.stream();
         if (isParallel)
