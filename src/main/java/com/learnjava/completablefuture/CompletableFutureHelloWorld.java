@@ -19,6 +19,11 @@ public class CompletableFutureHelloWorld {
         return CompletableFuture.supplyAsync(helloWorldService::helloWorld)
                 .thenApply(String::toUpperCase);
     }
+    public CompletableFuture<String> helloWorldThenCompose() {
+        return CompletableFuture.supplyAsync(helloWorldService::hello)
+                .thenCompose((previous)-> helloWorldService.worldFuture(previous))
+                .thenApply(String::toUpperCase);
+    }
 
     public String helloWorldMultipleAsync(){
         startTimer();
