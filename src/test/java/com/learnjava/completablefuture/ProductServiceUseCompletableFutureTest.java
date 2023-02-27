@@ -61,4 +61,21 @@ class ProductServiceUseCompletableFutureTest {
                         });
         assertNotNull(product.getReview());
     }
+
+    @Test
+    void retrieveProductDetailsWithInventoryApproachCF2() {
+        // given
+        String productId= "ABCD123";
+        // when
+        Product product = productServiceUseCompletableFuture.retrieveProductDetailsWithInventoryApproachCF2(productId);
+
+        // then
+        assertNotNull(product);
+        assertTrue(product.getProductInfo().getProductOptions().size() > 0);
+        product.getProductInfo().getProductOptions()
+                .forEach(productOption -> {
+                    assertNotNull(productOption.getInventory());
+                });
+        assertNotNull(product.getReview());
+    }
 }

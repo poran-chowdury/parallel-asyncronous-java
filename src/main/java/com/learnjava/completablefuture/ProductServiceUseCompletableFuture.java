@@ -62,6 +62,24 @@ public class ProductServiceUseCompletableFuture {
 
         return  product;
     }
+    public Product retrieveProductDetailsWithInventoryApproachCF2(String productId) {
+        stopWatchReset();
+        startTimer();
+        CompletableFuture<ProductInfo> productInfoCompletableFuture = CompletableFuture.supplyAsync(() -> productInfoService.retrieveProductInfo(productId))
+                .thenApply(productInfo -> {
+                    productInfo.setProductOptions(updateInventoryApproachCF(productInfo));
+                    return productInfo;
+                });
+        CompletableFuture<Review> reviewCompletableFuture = CompletableFuture
+                .supplyAsync(() -> reviewService.retrieveReviews(productId));
+
+        Product product = productInfoCompletableFuture.
+                thenCombine(reviewCompletableFuture, ((productInfo, review) -> new Product(productId, productInfo, review)))
+                .join();
+        timeTaken();
+
+        return  product;
+    }
 
     private List<ProductOption> updateInventory(ProductInfo productInfo) {
         return productInfo.getProductOptions()
@@ -70,6 +88,16 @@ public class ProductServiceUseCompletableFuture {
                     productOption.setInventory(inventory);
                 })
                 .collect(Collectors.toList());
+    }
+    private List<ProductOption> updateInventoryApproachCF(ProductInfo productInfo) {
+        List<CompletableFuture<ProductOption>> productOptionList = productInfo.getProductOptions()
+                .stream().map(productOption -> CompletableFuture.supplyAsync(() -> inventoryService.retrieveInventory(productOption))
+                        .thenApply(inventory -> {
+                            productOption.setInventory(inventory);
+                            return productOption;
+                        }))
+                .collect(Collectors.toList());
+       return productOptionList.stream().map(CompletableFuture::join).collect(Collectors.toList());
     }
 
     public CompletableFuture<Product> retrieveProductDetailsApproach2(String productId) {
