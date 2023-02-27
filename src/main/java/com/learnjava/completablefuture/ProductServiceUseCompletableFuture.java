@@ -101,6 +101,7 @@ public class ProductServiceUseCompletableFuture {
     }
 
     public CompletableFuture<Product> retrieveProductDetailsApproach2(String productId) {
+        stopWatch.reset();
         stopWatch.start();
         CompletableFuture<ProductInfo> productInfoCompletableFuture = CompletableFuture
                 .supplyAsync(() -> productInfoService.retrieveProductInfo(productId));
