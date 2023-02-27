@@ -30,4 +30,17 @@ class ProductServiceUseCompletableFutureTest {
         assertTrue(product.getProductInfo().getProductOptions().size() > 0);
         assertNotNull(product.getReview());
     }
+
+    @Test
+    void retrieveProductDetailsApproach2() {
+        // given
+        String productId= "ABCD123";
+        // when
+        Product product = productServiceUseCompletableFuture.retrieveProductDetailsApproach2(productId).join();
+
+        // then
+        assertNotNull(product);
+        assertTrue(product.getProductInfo().getProductOptions().size() > 0);
+        assertNotNull(product.getReview());
+    }
 }
