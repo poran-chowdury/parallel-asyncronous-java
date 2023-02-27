@@ -12,8 +12,8 @@ import static com.learnjava.util.CommonUtil.stopWatch;
 import static com.learnjava.util.LoggerUtil.log;
 
 public class ProductServiceUseCompletableFuture {
-    private ProductInfoService productInfoService;
-    private ReviewService reviewService;
+    private final ProductInfoService productInfoService;
+    private final ReviewService reviewService;
 
     public ProductServiceUseCompletableFuture(ProductInfoService productInfoService, ReviewService reviewService) {
         this.productInfoService = productInfoService;
