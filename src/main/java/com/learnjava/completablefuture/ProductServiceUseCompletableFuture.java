@@ -8,7 +8,7 @@ import com.learnjava.service.ReviewService;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.learnjava.util.CommonUtil.stopWatch;
+import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
 
 public class ProductServiceUseCompletableFuture {
@@ -21,7 +21,8 @@ public class ProductServiceUseCompletableFuture {
     }
 
     public Product retrieveProductDetails(String productId) {
-        stopWatch.start();
+        stopWatchReset();
+        startTimer();
         CompletableFuture<ProductInfo> productInfoCompletableFuture = CompletableFuture
                 .supplyAsync(() -> productInfoService.retrieveProductInfo(productId));
         CompletableFuture<Review> reviewCompletableFuture = CompletableFuture
@@ -30,6 +31,20 @@ public class ProductServiceUseCompletableFuture {
         Product product = productInfoCompletableFuture.
                 thenCombine(reviewCompletableFuture, ((productInfo, review) -> new Product(productId, productInfo, review)))
                 .join();
+
+        timeTaken();
+        log("Total Time Taken : " + stopWatch.getTime());
+        return  product;
+    }
+    public CompletableFuture<Product> retrieveProductDetailsApproach2(String productId) {
+        stopWatch.start();
+        CompletableFuture<ProductInfo> productInfoCompletableFuture = CompletableFuture
+                .supplyAsync(() -> productInfoService.retrieveProductInfo(productId));
+        CompletableFuture<Review> reviewCompletableFuture = CompletableFuture
+                .supplyAsync(() -> reviewService.retrieveReviews(productId));
+
+        CompletableFuture<Product> product = productInfoCompletableFuture.
+                thenCombine(reviewCompletableFuture, ((productInfo, review) -> new Product(productId, productInfo, review)));
 
         stopWatch.stop();
         log("Total Time Taken : " + stopWatch.getTime());
