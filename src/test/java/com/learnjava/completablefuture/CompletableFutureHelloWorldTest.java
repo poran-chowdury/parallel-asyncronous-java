@@ -11,12 +11,13 @@ import static com.learnjava.util.CommonUtil.timeTaken;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CompletableFutureHelloWorldTest {
-   private HelloWorldService helloWorldService;
-   CompletableFutureHelloWorld  cfhw;
+    private HelloWorldService helloWorldService;
+    CompletableFutureHelloWorld cfhw;
+
     @BeforeEach
     void setUp() {
-        this.helloWorldService= new HelloWorldService();
-        this.cfhw= new CompletableFutureHelloWorld(helloWorldService);
+        this.helloWorldService = new HelloWorldService();
+        this.cfhw = new CompletableFutureHelloWorld(helloWorldService);
     }
 
     @Test
@@ -29,7 +30,7 @@ class CompletableFutureHelloWorldTest {
 
         // then
         stringCompletableFuture.thenAccept(s -> {
-            assertEquals("HELLO WORLD",s);
+            assertEquals("HELLO WORLD", s);
         }).join();
     }
 
@@ -41,7 +42,7 @@ class CompletableFutureHelloWorldTest {
         String helloWorld = cfhw.helloWorldMultipleAsync();
 
         // then
-        assertEquals("HELLO WORLD!",helloWorld);
+        assertEquals("HELLO WORLD!", helloWorld);
     }
 
 
@@ -49,16 +50,37 @@ class CompletableFutureHelloWorldTest {
     void helloWorldThenCompose() {
         // given
 
-         startTimer();
+        startTimer();
         // when
         CompletableFuture<String> stringCompletableFuture = cfhw.helloWorldThenCompose();
 
         // then
         stringCompletableFuture.thenAccept(s -> {
-            assertEquals("HELLO WORLD!",s);
+            assertEquals("HELLO WORLD!", s);
         }).join();
         timeTaken();
     }
 
 
+    @Test
+    void helloWorldMultipleAsyncWithLog() {
+        // given
+        // when
+        String result = cfhw.helloWorldMultipleAsyncWithLog();
+
+        // then
+        assertEquals("HELLO WORLD!", result);
+
+
+    }
+
+    @Test
+    void helloWorldMultipleAsyncWithLog_Async() {
+        // given
+        // when
+        String result = cfhw.helloWorldMultipleAsyncWithLog_Async();
+
+        // then
+        assertEquals("HELLO WORLD!", result);
+    }
 }

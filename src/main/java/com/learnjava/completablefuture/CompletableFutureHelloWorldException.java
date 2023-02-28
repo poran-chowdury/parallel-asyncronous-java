@@ -9,7 +9,7 @@ import static com.learnjava.util.CommonUtil.timeTaken;
 import static com.learnjava.util.LoggerUtil.log;
 
 public class CompletableFutureHelloWorldException {
-    private HelloWorldService helloWorldService;
+    private final HelloWorldService helloWorldService;
 
     public CompletableFutureHelloWorldException(HelloWorldService helloWorldService) {
         this.helloWorldService = helloWorldService;
@@ -17,8 +17,8 @@ public class CompletableFutureHelloWorldException {
 
     public String helloWorldMultipleAsyncHandleException() {
         startTimer();
-        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> helloWorldService.hello());
-        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> helloWorldService.world());
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(helloWorldService::hello);
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(helloWorldService::world);
         String hellowrldString = hello
                 .handle((res, e) -> {
                     if (e != null) {
@@ -41,4 +41,45 @@ public class CompletableFutureHelloWorldException {
         timeTaken();
         return hellowrldString;
     }
+
+    public String helloWorldMultipleAsyncHandleExceptionUseExceptionally() {
+        startTimer();
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(helloWorldService::hello);
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(helloWorldService::world);
+        String hellowrldString = hello
+                .exceptionally((e) -> {
+                    log("Exception is : " + e.getMessage());
+                    return "";
+                })
+                .thenCombine(world, (h, w) -> h + w)
+                .exceptionally((e) -> {
+                    log("Exception in world  : " + e);
+                    return "";
+                })
+                .thenApply(String::toUpperCase)
+                .join();
+        timeTaken();
+        return hellowrldString;
+    }
+    public String helloWorldMultipleAsyncHandleExceptionUseWhenComplete() {
+        startTimer();
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(helloWorldService::hello);
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(helloWorldService::world);
+        String hellowrldString = hello
+                .whenComplete((res, e) -> {
+                    if (e != null)
+                        log("Exception is : " + e.getMessage());
+                })
+                .thenCombine(world, (h, w) -> h + w)
+                .whenComplete((res, e) -> {
+                    if (e != null)
+                        log("Exception in world  : " + e);
+
+                })
+                .thenApply(String::toUpperCase)
+                .join();
+        timeTaken();
+        return hellowrldString;
+    }
+
 }

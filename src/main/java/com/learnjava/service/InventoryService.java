@@ -6,6 +6,7 @@ import com.learnjava.domain.ProductOption;
 import java.util.concurrent.CompletableFuture;
 
 import static com.learnjava.util.CommonUtil.delay;
+import static com.learnjava.util.LoggerUtil.log;
 
 public class InventoryService {
     public Inventory addInventory(ProductOption productOption) {
@@ -36,6 +37,10 @@ public class InventoryService {
             delay(500);
             return Inventory.builder()
                     .count(2).build();
+        }).exceptionally((ex) -> {
+            log("Exception in Inventory Service : " + ex.getMessage());
+            return Inventory.builder()
+                    .count(1).build();
         });
 
     }
