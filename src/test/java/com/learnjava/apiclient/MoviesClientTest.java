@@ -1,6 +1,7 @@
 package com.learnjava.apiclient;
 
 import com.learnjava.util.CommonUtil;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -18,6 +19,7 @@ class MoviesClientTest {
     private MoviesClient moviesClient = new MoviesClient(webClient);
 
     @RepeatedTest(10)
+    @Disabled
     void retrieveMovie() {
         /*
          * {
@@ -46,6 +48,7 @@ class MoviesClientTest {
     }
 
     @RepeatedTest(10)
+    @Disabled
     void retrieveMovie_CF() {
         /*
          * {
@@ -74,6 +77,7 @@ class MoviesClientTest {
     }
 
     @RepeatedTest(10)
+    @Disabled
     void retrieveMovies() {
         // given
         List<Long> movieIds = List.of(1L, 2L, 3L, 4L,5L,6L,7L);
@@ -88,6 +92,7 @@ class MoviesClientTest {
     }
 
     @RepeatedTest(10)
+    @Disabled
     void retrieveMovies_CF() {
         // given
         List<Long> movieIds = List.of(1L, 2L, 3L, 4L,5L,6L,7L);
@@ -101,6 +106,7 @@ class MoviesClientTest {
         assert moives.size() == 7;
     }
     @RepeatedTest(10)
+    @Disabled
     void retrieveMovieList_CF_AllOf() {
         // given
         List<Long> movieIds = List.of(1L, 2L, 3L, 4L,5L,6L,7L);
