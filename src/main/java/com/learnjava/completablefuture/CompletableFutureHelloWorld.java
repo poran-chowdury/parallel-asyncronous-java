@@ -3,6 +3,7 @@ package com.learnjava.completablefuture;
 import com.learnjava.service.HelloWorldService;
 import com.learnjava.util.LoggerUtil;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -71,6 +72,38 @@ public class CompletableFutureHelloWorld {
                 .join();
         timeTaken();
         return hellowrldString;
+    }
+    public String anyOf(){
+        //db
+        CompletableFuture<String> db = CompletableFuture.supplyAsync(() -> {
+            delay(4000);
+            log("Hello world Db");
+            return "Hello world Db";
+        });
+        //rest
+        CompletableFuture<String> rest = CompletableFuture.supplyAsync(() -> {
+            delay(5000);
+            log("Hello world rest");
+            return "Hello world rest";
+        });
+        //sop
+        CompletableFuture<String> sop = CompletableFuture.supplyAsync(() -> {
+            delay(3000);
+            log("Hello world sop");
+            return "Hello world sop";
+        });
+
+        List<CompletableFuture<String>> completableFutures = List.of(db, rest, sop);
+        CompletableFuture<Object> anyOf = CompletableFuture.anyOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()]));
+
+        return  anyOf.thenApply(o -> {
+            if (o instanceof String s){
+                return  s;
+            }
+            return  null;
+        }).join();
+
+
     }
 
     public static void main(String[] args) {

@@ -83,4 +83,14 @@ class CompletableFutureHelloWorldTest {
         // then
         assertEquals("HELLO WORLD!", result);
     }
+
+    @Test
+    void anyOf() {
+        // given
+        String s = cfhw.anyOf();
+        assertNotNull(s);
+        // when
+
+        // then
+    }
 }
