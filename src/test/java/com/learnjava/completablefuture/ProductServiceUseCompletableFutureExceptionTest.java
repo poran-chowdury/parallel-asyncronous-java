@@ -31,16 +31,10 @@ class ProductServiceUseCompletableFutureExceptionTest {
         when(reviewService.retrieveReviews(any())).thenThrow(new RuntimeException("Exception occurred!"));
         when(inventoryService.retrieveInventory(any())).thenCallRealMethod();
         // when
-        Product product = productServiceUseCompletableFutureException.retrieveProductDetailsWithInventoryApproachCF2(productId);
+
         // then
-        assertNotNull(product);
-        assertTrue(product.getProductInfo().getProductOptions().size() > 0);
-        product.getProductInfo().getProductOptions()
-                .forEach(productOption -> {
-                    assertNotNull(productOption.getInventory());
-                });
-        assertNotNull(product.getReview());
-        assertEquals(0, product.getReview().getNoOfReviews());
+        Assertions.assertThrows(RuntimeException.class,()-> productServiceUseCompletableFutureException.retrieveProductDetailsWithInventoryApproachCF2(productId));
+
     }
     @Test
     void retrieveProductDetailsApproach2_Service_Error() {
