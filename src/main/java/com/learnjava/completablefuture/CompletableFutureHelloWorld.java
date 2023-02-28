@@ -96,9 +96,9 @@ public class CompletableFutureHelloWorld {
         List<CompletableFuture<String>> completableFutures = List.of(db, rest, sop);
         CompletableFuture<Object> anyOf = CompletableFuture.anyOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()]));
 
-        return  anyOf.thenApply(o -> {
-            if (o instanceof String s){
-                return  s;
+        return (String) anyOf.thenApply(o -> {
+            if (o instanceof String){
+                return  o;
             }
             return  null;
         }).join();
