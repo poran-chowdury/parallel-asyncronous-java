@@ -30,13 +30,15 @@ public class MoviesClient {
         return movieInfoCompletableFuture
                 .thenCombine(reviews, Movie::new);
     }
-    public List<Movie> retrieveMovieList(List<Long> movieInfoIds){
-          return movieInfoIds
-                  .stream()
-                  .map(this::retrieveMovie)
-                  .collect(Collectors.toList());
+
+    public List<Movie> retrieveMovieList(List<Long> movieInfoIds) {
+        return movieInfoIds
+                .stream()
+                .map(this::retrieveMovie)
+                .collect(Collectors.toList());
     }
-    public List<Movie> retrieveMovieList_CF(List<Long> movieInfoIds){
+
+    public List<Movie> retrieveMovieList_CF(List<Long> movieInfoIds) {
         List<CompletableFuture<Movie>> movieFutures = movieInfoIds
                 .stream()
                 .map(this::retrieveMovie_CF)
@@ -45,6 +47,21 @@ public class MoviesClient {
         return movieFutures.stream()
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
+    }
+
+    public List<Movie> retrieveMovieList_CF_AllOf(List<Long> movieInfoIds) {
+        List<CompletableFuture<Movie>> movieFutures = movieInfoIds
+                .stream()
+                .map(this::retrieveMovie_CF)
+                .collect(Collectors.toList());
+
+        var allOf = CompletableFuture.allOf(movieFutures.toArray(new CompletableFuture[0]));
+        return allOf.thenApply(unused ->
+                movieFutures.stream()
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toList())
+        ).join();
+
     }
 
     private MovieInfo invokeMovieInfoServices(Long movieInfoId) {

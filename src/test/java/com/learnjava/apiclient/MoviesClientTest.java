@@ -100,4 +100,17 @@ class MoviesClientTest {
         assert moives != null;
         assert moives.size() == 7;
     }
+    @RepeatedTest(10)
+    void retrieveMovieList_CF_AllOf() {
+        // given
+        List<Long> movieIds = List.of(1L, 2L, 3L, 4L,5L,6L,7L);
+        startTimer();
+        // when
+        var moives = moviesClient.retrieveMovieList_CF_AllOf(movieIds);
+        System.out.println("movie: "+ moives);
+        timeTaken();
+        // then
+        assert moives != null;
+        assert moives.size() == 7;
+    }
 }
