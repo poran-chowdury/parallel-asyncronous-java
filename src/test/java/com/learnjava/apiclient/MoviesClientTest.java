@@ -1,10 +1,10 @@
 package com.learnjava.apiclient;
 
-import com.learnjava.domain.movie.Movie;
 import com.learnjava.util.CommonUtil;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
 
 import static com.learnjava.util.CommonUtil.startTimer;
 import static com.learnjava.util.CommonUtil.timeTaken;
@@ -71,5 +71,33 @@ class MoviesClientTest {
         assertEquals("Batman Begins", movie.getMovieInfo().getName());
         assert movie.getReviewList().size() == 1;
 
+    }
+
+    @RepeatedTest(10)
+    void retrieveMovies() {
+        // given
+        List<Long> movieIds = List.of(1L, 2L, 3L, 4L,5L,6L,7L);
+        startTimer();
+        // when
+        var moives = moviesClient.retrieveMovieList(movieIds);
+        System.out.println("movie: "+ moives);
+        timeTaken();
+        // then
+        assert moives != null;
+        assert moives.size() == 7;
+    }
+
+    @RepeatedTest(10)
+    void retrieveMovies_CF() {
+        // given
+        List<Long> movieIds = List.of(1L, 2L, 3L, 4L,5L,6L,7L);
+        startTimer();
+        // when
+        var moives = moviesClient.retrieveMovieList_CF(movieIds);
+        System.out.println("movie: "+ moives);
+        timeTaken();
+        // then
+        assert moives != null;
+        assert moives.size() == 7;
     }
 }
